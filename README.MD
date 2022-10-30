@@ -437,13 +437,117 @@ Hot reloading allows you to see the changes that you have made in the code witho
 
 -------------------------------------------------------------------------------------------------------------------
 
+Part 3 :  sample app using Redux 
+
+https://redux.js.org/tutorials/essentials/part-3-data-flow  :
+
+----------------------------------------------------------------------------------------------------------
+
+# PART 3 : REDUX Data-Flow
+
+- Adding slices of reducer logic to the store with createSlice
+- Reading data in components using : useSelector hook 
+- Dispatching actions in components using : useDispatch hook 
+
+clone this project : https://github.com/reduxjs/redux-essentials-example-app > project set up
+
+
+### Using Redux 
+to add it to an existing app => 
+# NPM
+npm install @reduxjs/toolkit
+# Yarn
+yarn add @reduxjs/toolkit
+
+to create a react app with redux enabled
+# Redux + Plain JS template
+npx create-react-app my-app --template redux
+
+# Redux + TypeScript template
+npx create-react-app my-app --template redux-typescript
+
+## QUICK EXAMPLE 
+https://redux.js.org/introduction/getting-started
+
+https://github.com/josephbill/bookPostRedux.git : final project 
+
+Explaining the project structure : 
+
+/public: the HTML host page template and other static files like icons
+/src
+index.js: the entry point file for the application. It renders the React-Redux <Provider> component and the main <App> component.
+App.js: the main application component. Renders the top navbar and handles client-side routing for the other content.
+index.css: styles for the complete application
+/api
+client.js: a small AJAX request client that allows us to make GET and POST requests
+server.js: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
+/app
+Navbar.js: renders the top header and nav content
+store.js: creates the Redux store instance
+
+
+1. The main feature for our book listing app will be a list of books added by an admin.
+2. our first goal is to only show the list of books entries on screen.
+
+
+## creating the books slice
+
+- This slice will contain data for our books 
+- Once data is in the redux store, 
+
+3. Creating the app components : inside src : create a new features folder inside put a books folder , add a new file named booksSlice.js
+4. We are using the createSlice function to make our reducer function thats knows how to handle our books data 
+5. Remember reducer functions need to have intial data included in the store when an app loads up. 
+6. We will be using an array of fake books objects so that we add to the ui on initial render , 
+7. Import createSlice, define intial books array , pass that to createSlice , export the books reducers function that createSlice has generated for us. 
+8. Everytime u create a slice ,remember to add its reducer function to the store
+9. Open app app/store.js, import the booksReducer function,  update the call to configureStore so that the booksReducer is being passed as a reducer field named books, 
+10. This tells Redux that we want our top-level state object to have a field named books inside, and all the data for state.books will be updated by the booksReducer function when actions are dispatched.
+
+
+## Showing the books lists 
+ 
+11. Lets create a component to show our books , all code related to the books feature will be placed in the books folder => create a new file named BooksLists.js
+12. Our react component will read data from redux using the useSelector hook from react-redux
+13. The selector functions will be called with the entire redux state object as a parameter and should return specific data that a componenent needs from the store 
+14. Our intial books screen will read data from the state.books value in the store , loop over it and display it in a list 
+15. Update the routing in app.js so as to show the component , we will wrap the component inside a reactFragment 
+16. Next up we create our add books form to add more books , inside books -> create AddBooksForm.js file.
+
+## Dispatching actions 
+
+17. We can now update our BooksSlice to add new books entries to the redux store 
+18. in this case we add a reducer logic to handle the case of a post being added 
+19. Add a function named postAdded , -> receives two arguments state and action (i.e event dispatched)
+20. The state argument will be an array of the books itself and not the entire redux state object 
+21. The action object will have our new post entry as the action.payload field, and we'll put that new post object into the state array.
+22. When we write our reducer function, createSlice automatically generates an action creator function with the same name. 
+23. We export that action creator and use it in our UI components to dispatch an action when the user clicks 'save post'.
+24. We will add a click listener to handle the postAdded action creator and pass a new post in our object containint hte title and content plus id 
+25. So as to generate a random id we will use redux toolkit inbuilt nanoid function.
+26. Inorder to dispatch actions from a component 
+  -> call the dispatch(postAdded()) function in a click handler 
+  -> we can take the title and description of the books from our component via the useState hooks
+  -> and books all details as an object 
 
 
 
+  // and thats it your first redux app : 
+  the app shows the basis of the redux data cycle 
 
 
+- Our books list read the initial set of books from the store with useSelector and rendered the initial UI
+- We dispatched the postAdded action containing the data for the new post entry
+- The books reducer saw the postAdded action, and updated the books array with the new entry
+- The Redux store told the UI that some data had changed
+- The books list read the updated books array, and re-rendered itself to show the new post
 
 
+If you want to use redux for any new feature after this simply : 
+1. Adding slices of state 
+2. Writing reducer functions 
+3. Dispatching actions 
+4. Rendering the UI based of the data in the redux store.
 
 
 
